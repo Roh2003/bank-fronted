@@ -12,7 +12,7 @@ import {
 } from 'react-router-dom';
 
 import Layout from './layout.jsx';
-import SigninPage from './components/signin.jsx';
+import SigninPage from './components/signIn.jsx'
 import SignupPage from './components/signup.jsx';
 import SigninPageB from './components/bankerlogin.jsx';
 import CustomerPage from './components/customerPage.jsx';
