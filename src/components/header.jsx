@@ -1,6 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import LogoutButton from "./signout";
 
 
 export default function Header() {
@@ -10,12 +10,8 @@ export default function Header() {
                 <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
                     <h1 className="text-2xl font-semibold text-orange-700">Enpointe.io</h1>
                     <div className="flex items-center lg:order-2">
-                        <Link
-                            to="/signin"
-                            className="text-gray-800 hover:bg-orange-700 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none bg-orange-500"
-                        >
-                            Log out
-                        </Link>
+                        <LogoutButton />
+                        
                         
                     </div>
                     <div

@@ -1,58 +1,59 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
 
-export default function SigninPage({ onSignInPage }) {
+function SigninPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
-    // Check for admin credentials
-    if (email === "admin@gmail.com" && password === "admin@admin") {
-      localStorage.setItem('token', 'admin-token');
-      localStorage.setItem('role', 'admin');
-      navigate('/admin');
-      return;
-    }
-  
+
     try {
       const res = await fetch('http://localhost:5000/api/check-user', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
-    
+
       const data = await res.json();
-    
+
       if (res.ok) {
         localStorage.setItem('token', data.token);
-        localStorage.setItem('role', 'user');
+        localStorage.setItem('role', data.user.role);
         localStorage.setItem('user', JSON.stringify(data.user));
-        navigate('/layout');
+
+        toast.success("Login Successful");
+
+        // Redirect based on role (both currently to /layout)
+        navigate(data.user.role === 'admin' ? '/layout' : '/layout');
       } else {
-        alert(data.message || 'Invalid credentials');
+        toast.error(data.message || "Invalid credentials");
       }
     } catch (error) {
       console.error('Login error:', error);
-      alert('An error occurred during login');
+      toast.warn("An Error Occurred During Login");
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-      <h1 className="text-3xl text-orange-600 pb-10"> <strong>Welcome to Enpointe.io Banking Service</strong></h1>
-      <form onSubmit={handleLogin} className="bg-white p-6 rounded shadow-md w-full max-w-sm">
-        <h2 className="text-2xl font-bold mb-4 text-center">Sign In</h2>
-
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4">
+      <ToastContainer position="top-center" autoClose={3000} theme="light" />
+      <h1 className="text-2xl sm:text-3xl text-orange-600 pb-8 text-center max-w-md">
+        <strong>Welcome to Enpointe.io Banking Service</strong>
+      </h1>
+      <form
+        onSubmit={handleLogin}
+        className="bg-white p-6 sm:p-8 rounded shadow-md w-full max-w-md"
+      >
+        <h2 className="text-xl sm:text-2xl font-bold mb-6 text-center">Sign In</h2>
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full mb-3 p-2 border border-gray-300 rounded"
+          className="w-full mb-4 p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
           required
         />
         <input
@@ -60,21 +61,26 @@ export default function SigninPage({ onSignInPage }) {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full mb-3 p-2 border border-gray-300 rounded"
+          className="w-full mb-6 p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
           required
         />
         <button
           type="submit"
-          className="w-full bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600"
+          className="w-full bg-orange-500 text-white py-3 rounded hover:bg-orange-600 transition"
         >
           Sign In
         </button>
-        <h1 className="text-center mt-4">
+        <div className="mt-6 flex flex-col items-center space-y-3 text-sm">
           <Link to="/signup" className="text-blue-500 hover:text-blue-700">
             New user? Sign up here
           </Link>
-        </h1>
+          <Link to="/signinb" className="text-blue-500 hover:text-blue-700">
+            Banker's Login
+          </Link>
+        </div>
       </form>
     </div>
   );
 }
+
+export default SigninPage;

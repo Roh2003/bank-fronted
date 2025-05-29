@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TransactionModal from './transactionModel.jsx';
+import {toast, ToastContainer} from 'react-toastify'
 
 const CustomerPage = () => {
   const [balance, setBalance] = useState(0);
@@ -7,9 +8,11 @@ const CustomerPage = () => {
   const [modalType, setModalType] = useState('Deposit');
   const [loading, setLoading] = useState(true);
 
-  // Fetch balance when component mounts
+
   useEffect(() => {
     const fetchBalance = async () => {
+      setLoading(true); 
+  
       try {
         const res = await fetch('http://localhost:5000/api/customer/account', {
           method: 'GET',
@@ -20,25 +23,32 @@ const CustomerPage = () => {
   
         const data = await res.json();
   
-        if (res.ok && data && data.Balance !== undefined) {
+        if (res.ok && data && typeof data.Balance === 'number') {
           setBalance(data.Balance);
+          toast.success("Welcome to Enpointe Banking Service!", {
+            toastId: 'welcome-toast' 
+          });
         } else {
-          alert(data.message || 'Failed to fetch balance');
+          toast.error(data.message || 'Failed to fetch balance');
         }
       } catch (err) {
         console.error('Error:', err);
-        alert('Something went wrong while fetching balance');
+        toast.error("Something went wrong while fetching balance");
       } finally {
-        setLoading(false);
+        setLoading(false); 
       }
     };
   
     fetchBalance();
   }, []);
   
-
-  // Submit transaction
+  
   const handleTransaction = async (amount) => {
+    if (!amount || isNaN(amount) || amount <= 0) {
+      toast.error("Please enter a valid amount");
+      return;
+    }
+  
     try {
       const res = await fetch('http://localhost:5000/api/customer/transaction', {
         method: 'POST',
@@ -48,23 +58,31 @@ const CustomerPage = () => {
         },
         body: JSON.stringify({ type: modalType, amount })
       });
-
+  
       const data = await res.json();
-
+  
       if (res.ok) {
         setBalance(data.newBalance);
         setShowModal(false);
+        toast.success(`${modalType} successful! New balance: $${data.newBalance.toFixed(2)}`);
       } else {
-        alert(data.message || 'Transaction failed');
+        toast.error(data.message || 'Transaction failed');
       }
     } catch (err) {
       console.error('Transaction error:', err);
-      alert('Error while processing transaction');
+      toast.error('Error while processing transaction');
     }
   };
+  
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
+      <ToastContainer
+      position="top-center"
+      autoClose={3000}
+      hideProgressBar={false}
+      theme="light"
+      />
       <h1 className="text-2xl font-semibold mb-4">Customer Transactions</h1>
 
       {loading ? (

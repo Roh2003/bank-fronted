@@ -19,7 +19,7 @@ function Layout() {
       return;
     }
 
-    if (user.email === 'admin@gmail.com') {
+    if (user.role  === 'admin') {
       setRoleComponent(<BankerDashboard />);
     } else {
       setRoleComponent(<CustomerPage />);
