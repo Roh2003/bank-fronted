@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
-import Header from './components/Header'; // Adjust path if needed
-import Footer from './components/Footer';
+import Header from './components/header';
+import Footer from './components/footer';
 import CustomerPage from './components/customerPage';
 import BankerDashboard from './components/banker';
 
