@@ -11,7 +11,7 @@ function SigninPage() {
     e.preventDefault();
 
     try {
-      const res = await fetch('https://bank-backend-c1sy.onrender.com/check-user', {
+      const res = await fetch('https://bank-backend-c1sy.onrender.com/api/check-user', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
