@@ -14,7 +14,7 @@ export default function SignupPage() {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/creating-user", {
+      const res = await fetch("https://bank-backend-c1sy.onrender.com/creating-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
