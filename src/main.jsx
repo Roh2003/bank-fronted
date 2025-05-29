@@ -12,12 +12,12 @@ import {
 } from 'react-router-dom';
 
 import Layout from './layout.jsx';
-import SigninPage from './components/signin.jsx';
 import SignupPage from './components/signup.jsx';
 import SigninPageB from './components/bankerlogin.jsx';
 import CustomerPage from './components/customerPage.jsx';
 import BankerDashboard from './components/banker.jsx';
 import TransactionModal from './components/transactionModel.jsx';
+import SigninPage from './components/signin.jsx';
 
 
 const ProtectedRoute = ({ children }) => {
