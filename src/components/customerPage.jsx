@@ -89,7 +89,7 @@ const CustomerPage = () => {
         setBalance(data.newBalance);
         setShowModal(false);
         toast.success(`${modalType} successful! New balance: $${data.newBalance.toFixed(2)}`);
-        fetchTransactions(); // ✅ Refresh transaction history after transaction
+        fetchTransactions(); 
       } else {
         toast.error(data.message || 'Transaction failed');
       }
