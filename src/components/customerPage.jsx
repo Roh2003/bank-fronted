@@ -11,7 +11,7 @@ const CustomerPage = () => {
 
   const fetchBalance = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/customer/account', {
+      const res = await fetch('https://bank-backend-c1sy.onrender.com/api/customer/account', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -33,7 +33,7 @@ const CustomerPage = () => {
 
   const fetchTransactions = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/customer/transaction/fetch', {
+      const res = await fetch('https://bank-backend-c1sy.onrender.com/api/customer/transaction/fetch', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -74,7 +74,7 @@ const CustomerPage = () => {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/customer/transaction/add', {
+      const res = await fetch('https://bank-backend-c1sy.onrender.com/api/customer/transaction/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

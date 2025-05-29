@@ -11,7 +11,7 @@ const BankerDashboard = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch('http://localhost:5000/api/all_transactions', {
+        const res = await fetch('https://bank-backend-c1sy.onrender.com/api/all_transactions', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
