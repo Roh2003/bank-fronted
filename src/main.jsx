@@ -16,8 +16,9 @@ import SigninPageB from './components/bankerlogin.jsx';
 import CustomerPage from './components/customerPage.jsx';
 import BankerDashboard from './components/banker.jsx';
 import TransactionModal from './components/transactionModel.jsx';
-import SigninPage from './components/signin.jsx';
-import SignupPage from './components/signup.jsx'
+import SigninPage from './components/signinPage.jsx';
+import SignupPage from './components/signupPage.jsx';
+
 
 
 const ProtectedRoute = ({ children }) => {
