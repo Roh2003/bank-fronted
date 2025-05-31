@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import TransactionModal from './transactionModel.jsx';
 import { toast, ToastContainer } from 'react-toastify';
+import { Loader } from 'lucide-react';
 
 const CustomerPage = () => {
   const [balance, setBalance] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState('Deposit');
   const [loading, setLoading] = useState(true);
+  const [loadingDeposit, setLoadingDeposit] = useState(false);
+  const [loadingWithdraw, setLoadingWithdraw] = useState(false);
+
+
   const [transactions, setTransactions] = useState([]);
 
   const fetchBalance = async () => {
     try {
       const res = await fetch('https://bank-backend-c1sy.onrender.com/api/customer/account', {
-        method: 'GET',
+        method: 'GET', 
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -68,10 +73,14 @@ const CustomerPage = () => {
   }, []);
 
   const handleTransaction = async (amount) => {
+    
     if (!amount || isNaN(amount) || amount <= 0) {
       toast.error("Please enter a valid amount");
       return;
     }
+
+    if (modalType === 'Deposit') setLoadingDeposit(true);
+    else setLoadingWithdraw(true);
 
     try {
       const res = await fetch('https://bank-backend-c1sy.onrender.com/api/customer/transaction/add', {
@@ -96,6 +105,9 @@ const CustomerPage = () => {
     } catch (err) {
       console.error('Transaction error:', err);
       toast.error('Error while processing transaction');
+    } finally {
+      if (modalType === 'Deposit') setLoadingDeposit(false);
+      else setLoadingWithdraw(false);
     }
   };
 
@@ -115,15 +127,19 @@ const CustomerPage = () => {
             <button
               onClick={() => { setModalType('Deposit'); setShowModal(true); }}
               className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              disabled={loadingDeposit}
             >
-              Deposit
+              {loadingDeposit && <Loader className="h-5 w-5 animate-spin inline-block" />}
+              {loadingDeposit ? "" : "Deposit"}
             </button>
 
             <button
               onClick={() => { setModalType('Withdraw'); setShowModal(true); }}
               className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              disabled={loadingWithdraw}
             >
-              Withdraw
+              {loadingWithdraw && <Loader className='h-5 w-5 animate-spin inline-block' />}
+              {loadingWithdraw ? "" : "Withdraw" }
             </button>
           </div>
 

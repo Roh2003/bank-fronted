@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from 'react-toastify';
+import { Loader } from "lucide-react";
 
 function SigninPageB() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true)
 
     try {
       const res = await fetch('https://bank-backend-c1sy.onrender.com/api/check-user', {
@@ -24,15 +27,16 @@ function SigninPageB() {
         localStorage.setItem('role', data.user.role);
         localStorage.setItem('user', JSON.stringify(data.user));
 
-        toast.success("Login Successful");
-
         navigate(data.user.role === 'admin' ? '/layout' : '/layout');
+        toast.success("Login Successful");
       } else {
         toast.error(data.message || "Invalid credentials");
       }
     } catch (error) {
-      console.error('Login error:', error);
       toast.warn("An error occurred during login");
+      console.error('Login error:', error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -70,8 +74,10 @@ function SigninPageB() {
           type="submit" 
           className="w-full bg-orange-500 text-white py-3 rounded hover:bg-orange-600 transition-colors duration-300"
           aria-label="Sign In"
+          disabled={loading}
         >
-          Sign In
+          {loading && <Loader className="h-5 w-5 animate-spin inline-block" />}
+          {loading ? "Loading..." : "SignIn"}
         </button>
       </form>
     </div>

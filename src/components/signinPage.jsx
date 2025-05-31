@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast, ToastContainer } from 'react-toastify';
+import {Loader} from 'lucide-react'
 
 function SigninPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true)
 
     try {
       const res = await fetch('https://bank-backend-c1sy.onrender.com/api/check-user', {
@@ -34,6 +37,8 @@ function SigninPage() {
     } catch (error) {
       console.error('Login error:', error);
       toast.warn("An Error Occurred During Login");
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -67,8 +72,10 @@ function SigninPage() {
         <button
           type="submit"
           className="w-full bg-orange-500 text-white py-3 rounded hover:bg-orange-600 transition"
+          disabled={loading}
         >
-          Sign In
+          {loading && <Loader className="h-5 w-5 animate-spin inline-block" />}
+          {loading ? "Loading..." : "Sign In"}
         </button>
         <div className="mt-6 flex flex-col items-center space-y-3 text-sm">
           <Link to="/signup" className="text-blue-500 hover:text-blue-700">

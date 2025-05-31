@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
+import { Loader } from "lucide-react";
 
 export default function SignupPage() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     setError("");
 
     try {
@@ -20,7 +23,9 @@ export default function SignupPage() {
         body: JSON.stringify({ username, email, password }),
       });
 
+
       const data = await res.json();
+
 
       if (res.ok) {
         toast.success("Registration Complete");
@@ -31,6 +36,8 @@ export default function SignupPage() {
     } catch (error) {
       console.error("Registration error:", error);
       setError("An error occurred during registration");
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -81,8 +88,10 @@ export default function SignupPage() {
         <button
           type="submit"
           className="w-full bg-green-500 text-white py-3 rounded hover:bg-green-600 transition"
+          disabled={loading}
         >
-          Sign Up
+          {loading && <Loader className="h-5 w-5 animate-spin inline-block" />}
+          {loading ? "Loading..." : "Sign Up"}
         </button>
 
         <p className="text-center mt-6 text-sm">
